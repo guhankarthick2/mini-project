@@ -16,4 +16,3 @@ while start.lower() == "yes":
 
     print(f"The answer is {value}")
     start =input("Do you want to continue? (yes/no): ")
-
