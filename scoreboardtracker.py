@@ -27,9 +27,12 @@ sorted_points_indices = sorted(index_points, key=lambda x: x[1], reverse=True)
 sorted_points = [value for index, value in sorted_points_indices]
 original_indices = [index for index, value in sorted_points_indices]
 
-print(f" The top 3 teams: "
-      f"1st place is {teams[original_indices[0]]} with {sorted_points[0]} points "
-      f"2nd place is {teams[original_indices[1]]} with {sorted_points[1]} points "
-      f"3rd place is {teams[original_indices[2]]} with {sorted_points[2]} points ")
+
+print("Teams   Points   Place")
+for i in range(teams_count):
+    print(f" {teams[original_indices[i]]}    {sorted_points[i]}    #{i+1} ")
+# need to make it so teams with same number of points should have same place by tomorrow
+
+
 
 
