@@ -24,6 +24,7 @@ Only you can add or remove highlights:
 1. Click **Admin** at the bottom of the page (or visit `?admin`)
 2. Log in with your password
 3. Add YouTube/Vimeo links or repo video paths (e.g. `videos/clip.mp4`)
-4. Click **Download JSON**, replace `highlights.json` in the repo, and push
+4. Click **Edit** on any highlight to change its description or date
+5. Click **Download JSON**, replace `highlights.json` in the repo, and push
 
 Change the admin password by editing `ADMIN_PASSWORD_HASH` in `index.html` (SHA-256 hash of your new password).

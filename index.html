@@ -14,6 +14,7 @@
       --muted: #8b9cb3;
       --accent: #3b82f6;
       --accent-hover: #2563eb;
+      --accent-soft: rgba(59, 130, 246, 0.15);
       --danger: #ef4444;
       --success: #4ade80;
       --radius: 12px;
@@ -31,7 +32,7 @@
     }
 
     .page {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 2rem 1.25rem 3rem;
     }
@@ -68,6 +69,12 @@
 
     .form-grid { display: grid; gap: 1rem; }
 
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
     label {
       display: block;
       font-size: 0.875rem;
@@ -78,6 +85,8 @@
 
     input[type="url"],
     input[type="password"],
+    input[type="date"],
+    input[type="text"],
     textarea {
       width: 100%;
       background: var(--bg);
@@ -157,27 +166,38 @@
     .toolbar h2 { margin: 0; }
     .count { color: var(--muted); font-size: 0.9rem; }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.25rem;
+    .highlights-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
 
-    .card {
+    .highlight-row {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.15fr) minmax(220px, 0.85fr);
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
       box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
+      border-left: 4px solid var(--accent);
+    }
+
+    .highlight-row:nth-child(even) {
+      border-left-color: #6366f1;
     }
 
     .video-wrap {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 9;
+      min-height: 220px;
       background: #000;
+    }
+
+    .video-wrap::before {
+      content: "";
+      display: block;
+      padding-top: 56.25%;
     }
 
     .video-wrap iframe,
@@ -190,18 +210,55 @@
       object-fit: cover;
     }
 
-    .card-body {
-      padding: 1rem 1.1rem 1.1rem;
-      flex: 1;
+    .highlight-content {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      justify-content: center;
+      gap: 0.85rem;
+      padding: 1.5rem 1.75rem;
+      border-left: 1px solid var(--border);
+      background: linear-gradient(135deg, var(--surface) 0%, #151d2b 100%);
     }
 
-    .card-body p {
-      flex: 1;
-      white-space: pre-wrap;
-      word-break: break-word;
+    .highlight-index {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .highlight-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .highlight-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      width: fit-content;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: var(--accent-soft);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+    }
+
+    .highlight-date svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
     }
 
     .empty {
@@ -210,7 +267,6 @@
       color: var(--muted);
       border: 2px dashed var(--border);
       border-radius: var(--radius);
-      grid-column: 1 / -1;
     }
 
     .status {
@@ -251,12 +307,16 @@
 
     .modal {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 1.5rem;
       box-shadow: var(--shadow);
+    }
+
+    .modal.wide {
+      max-width: 520px;
     }
 
     .modal h2 {
@@ -268,6 +328,21 @@
       margin-top: 2rem;
       text-align: center;
     }
+
+    @media (max-width: 800px) {
+      .highlight-row {
+        grid-template-columns: 1fr;
+      }
+
+      .highlight-content {
+        border-left: none;
+        border-top: 1px solid var(--border);
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -278,7 +353,7 @@
     </header>
 
     <div id="admin-banner" class="admin-banner hidden">
-      <span>Admin mode — you can add and remove highlights</span>
+      <span>Admin mode — add, edit, and remove highlights</span>
       <div class="actions">
         <button type="button" id="export-btn" class="btn-secondary">Download JSON</button>
         <button type="button" id="logout-btn" class="btn-secondary">Log out</button>
@@ -293,9 +368,16 @@
           <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=... or videos/clip.mp4" required>
           <p class="hint">YouTube, Vimeo, or a path to a video in this repo (e.g. videos/my-clip.mp4).</p>
         </div>
-        <div>
-          <label for="description">Description</label>
-          <textarea id="description" placeholder="What happened in this highlight?" required></textarea>
+        <div class="form-row">
+          <div>
+            <label for="description">Description</label>
+            <textarea id="description" placeholder="What happened in this highlight?" required></textarea>
+          </div>
+          <div>
+            <label for="highlight-date">Date (optional)</label>
+            <input type="date" id="highlight-date">
+            <p class="hint">Match or event date, if known.</p>
+          </div>
         </div>
         <div class="actions">
           <button type="submit" class="btn-primary">Add Highlight</button>
@@ -309,7 +391,7 @@
         <h2>Highlights</h2>
         <span id="highlight-count" class="count">0 highlights</span>
       </div>
-      <div id="highlights-grid" class="grid"></div>
+      <div id="highlights-list" class="highlights-list"></div>
     </section>
 
     <footer>
@@ -334,14 +416,36 @@
     </div>
   </div>
 
+  <div id="edit-modal" class="modal-backdrop hidden">
+    <div class="modal wide" role="dialog" aria-labelledby="edit-title">
+      <h2 id="edit-title">Edit Highlight</h2>
+      <form id="edit-form" class="form-grid">
+        <div>
+          <label for="edit-description">Description</label>
+          <textarea id="edit-description" required></textarea>
+        </div>
+        <div>
+          <label for="edit-date">Date (optional)</label>
+          <input type="date" id="edit-date">
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn-primary">Save changes</button>
+          <button type="button" id="cancel-edit-btn" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+      <p id="edit-status" class="status" aria-live="polite"></p>
+    </div>
+  </div>
+
   <script>
     const ADMIN_SESSION_KEY = "guhan-highlights-admin";
     const ADMIN_PASSWORD_HASH = "15b1bc11d3fb09cc46b6464f983f1d04a7204a4bbf6df0b78e584b212c0bb4e9";
 
     const highlights = [];
     let isAdmin = false;
+    let editingId = null;
 
-    const grid = document.getElementById("highlights-grid");
+    const list = document.getElementById("highlights-list");
     const countEl = document.getElementById("highlight-count");
     const adminPanel = document.getElementById("admin-panel");
     const adminBanner = document.getElementById("admin-banner");
@@ -354,6 +458,12 @@
     const addForm = document.getElementById("add-form");
     const formStatus = document.getElementById("form-status");
     const exportBtn = document.getElementById("export-btn");
+    const editModal = document.getElementById("edit-modal");
+    const editForm = document.getElementById("edit-form");
+    const editStatus = document.getElementById("edit-status");
+    const cancelEditBtn = document.getElementById("cancel-edit-btn");
+
+    const calendarIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
 
     async function hashPassword(password) {
       const data = new TextEncoder().encode(password);
@@ -371,6 +481,11 @@
       loginStatus.className = "status" + (type ? ` ${type}` : "");
     }
 
+    function setEditStatus(message, type = "") {
+      editStatus.textContent = message;
+      editStatus.className = "status" + (type ? ` ${type}` : "");
+    }
+
     function createId() {
       return crypto.randomUUID ? crypto.randomUUID() : `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     }
@@ -386,6 +501,17 @@
 
     function escapeAttr(text) {
       return escapeHtml(text).replaceAll("`", "&#96;");
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "";
+      const date = new Date(dateStr + "T00:00:00");
+      if (Number.isNaN(date.getTime())) return dateStr;
+      return date.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
     }
 
     function parseVideoUrl(url) {
@@ -411,43 +537,58 @@
         id: item.id || createId(),
         url: item.url || "",
         description: item.description || "",
+        date: item.date || "",
         addedAt: item.addedAt || new Date().toISOString()
       };
     }
 
     function render() {
-      grid.innerHTML = "";
+      list.innerHTML = "";
 
       if (highlights.length === 0) {
-        grid.innerHTML = '<div class="empty">No highlights yet.</div>';
+        list.innerHTML = '<div class="empty">No highlights yet.</div>';
       } else {
-        highlights.forEach((item) => {
+        highlights.forEach((item, index) => {
           const media = parseVideoUrl(item.url);
-          const card = document.createElement("article");
-          card.className = "card";
+          const row = document.createElement("article");
+          row.className = "highlight-row";
 
           const videoHtml = media.type === "iframe"
             ? `<iframe src="${media.src}" title="${escapeHtml(item.description)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`
             : `<video src="${escapeAttr(media.src)}" controls preload="metadata"></video>`;
 
-          const removeBtn = isAdmin
-            ? `<button type="button" class="btn-danger" data-action="delete">Remove</button>`
+          const dateHtml = item.date
+            ? `<div class="highlight-date">${calendarIcon}${escapeHtml(formatDate(item.date))}</div>`
             : "";
 
-          card.innerHTML = `
+          const adminActions = isAdmin
+            ? `<div class="card-actions">
+                <button type="button" class="btn-secondary" data-action="edit">Edit</button>
+                <button type="button" class="btn-danger" data-action="delete">Remove</button>
+              </div>`
+            : "";
+
+          row.innerHTML = `
             <div class="video-wrap">${videoHtml}</div>
-            <div class="card-body">
-              <p>${escapeHtml(item.description)}</p>
-              ${removeBtn}
+            <div class="highlight-content">
+              <div class="highlight-index">Highlight ${highlights.length - index}</div>
+              <h3 class="highlight-title">${escapeHtml(item.description)}</h3>
+              ${dateHtml}
+              ${adminActions}
             </div>
           `;
 
-          const deleteBtn = card.querySelector('[data-action="delete"]');
+          const editBtn = row.querySelector('[data-action="edit"]');
+          if (editBtn) {
+            editBtn.addEventListener("click", () => openEditModal(item.id));
+          }
+
+          const deleteBtn = row.querySelector('[data-action="delete"]');
           if (deleteBtn) {
             deleteBtn.addEventListener("click", () => removeHighlight(item.id));
           }
 
-          grid.appendChild(card);
+          list.appendChild(row);
         });
       }
 
@@ -464,6 +605,7 @@
         sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
       } else {
         sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        hideEditModal();
       }
 
       render();
@@ -481,6 +623,25 @@
       setLoginStatus("");
     }
 
+    function openEditModal(id) {
+      const item = highlights.find((h) => h.id === id);
+      if (!item) return;
+
+      editingId = id;
+      document.getElementById("edit-description").value = item.description;
+      document.getElementById("edit-date").value = item.date || "";
+      setEditStatus("");
+      editModal.classList.remove("hidden");
+      document.getElementById("edit-description").focus();
+    }
+
+    function hideEditModal() {
+      editingId = null;
+      editModal.classList.add("hidden");
+      editForm.reset();
+      setEditStatus("");
+    }
+
     async function loadHighlights() {
       const response = await fetch("highlights.json", { cache: "no-store" });
       if (!response.ok) {
@@ -495,14 +656,25 @@
       render();
     }
 
-    function addHighlight(url, description) {
+    function addHighlight(url, description, date) {
       highlights.unshift(normalizeHighlight({
         id: createId(),
         url: url.trim(),
-        description: description.trim()
+        description: description.trim(),
+        date: date || ""
       }));
       render();
       setFormStatus("Highlight added. Download JSON and commit to publish changes.", "success");
+    }
+
+    function updateHighlight(id, description, date) {
+      const item = highlights.find((h) => h.id === id);
+      if (!item) return;
+
+      item.description = description.trim();
+      item.date = date || "";
+      render();
+      setFormStatus("Highlight updated. Download JSON and commit to publish changes.", "success");
     }
 
     function removeHighlight(id) {
@@ -514,18 +686,28 @@
     }
 
     function exportHighlightsJson() {
-      return highlights.map((item) => ({
-        id: item.id,
-        url: item.url,
-        description: item.description,
-        addedAt: item.addedAt
-      }));
+      return highlights.map((item) => {
+        const entry = {
+          id: item.id,
+          url: item.url,
+          description: item.description,
+          addedAt: item.addedAt
+        };
+        if (item.date) entry.date = item.date;
+        return entry;
+      });
     }
 
     adminLoginBtn.addEventListener("click", showLoginModal);
     cancelLoginBtn.addEventListener("click", hideLoginModal);
+    cancelEditBtn.addEventListener("click", hideEditModal);
+
     loginModal.addEventListener("click", (event) => {
       if (event.target === loginModal) hideLoginModal();
+    });
+
+    editModal.addEventListener("click", (event) => {
+      if (event.target === editModal) hideEditModal();
     });
 
     loginForm.addEventListener("submit", async (event) => {
@@ -550,14 +732,31 @@
       event.preventDefault();
       const url = document.getElementById("video-url").value.trim();
       const description = document.getElementById("description").value.trim();
+      const date = document.getElementById("highlight-date").value;
 
       if (!url || !description) {
         setFormStatus("Please provide both a video URL and description.", "error");
         return;
       }
 
-      addHighlight(url, description);
+      addHighlight(url, description, date);
       addForm.reset();
+    });
+
+    editForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!editingId) return;
+
+      const description = document.getElementById("edit-description").value.trim();
+      const date = document.getElementById("edit-date").value;
+
+      if (!description) {
+        setEditStatus("Description cannot be empty.", "error");
+        return;
+      }
+
+      updateHighlight(editingId, description, date);
+      hideEditModal();
     });
 
     exportBtn.addEventListener("click", () => {
@@ -574,7 +773,7 @@
       try {
         await loadHighlights();
       } catch (error) {
-        grid.innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
+        list.innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
       }
 
       if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "1") {
