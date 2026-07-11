@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Highlights</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface-hover: #243044;
+      --border: #2d3a4f;
+      --text: #e8edf4;
+      --muted: #8b9cb3;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --radius: 12px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    header h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      color: var(--muted);
+      margin-top: 0.5rem;
+      max-width: 560px;
+      margin-inline: auto;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .panel h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .source-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .source-tab {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .source-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--muted);
+    }
+
+    input[type="text"],
+    input[type="url"],
+    textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 0.75rem 0.9rem;
+      font: inherit;
+      transition: border-color 0.15s;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .file-drop {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 2rem 1.5rem;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .file-drop:hover,
+    .file-drop.dragover {
+      border-color: var(--accent);
+      background: #121a24;
+    }
+
+    .file-drop strong {
+      color: var(--text);
+    }
+
+    .file-drop span {
+      color: var(--muted);
+      font-size: 0.875rem;
+    }
+
+    .file-name {
+      font-size: 0.875rem;
+      color: #4ade80;
+      margin-top: 0.5rem;
+      word-break: break-all;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.1rem;
+      font-weight: 600;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: var(--surface-hover);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: #2c3b52;
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 0.45rem 0.8rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-danger:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.45rem;
+      border-radius: 4px;
+      background: var(--surface-hover);
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .badge.upload {
+      color: #93c5fd;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .toolbar h2 {
+      margin: 0;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .video-wrap iframe,
+    .video-wrap video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 1rem 1.1rem 1.1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .card-body p {
+      flex: 1;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      color: var(--muted);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      grid-column: 1 / -1;
+    }
+
+    .status {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      min-height: 1.25rem;
+    }
+
+    .status.success {
+      color: #4ade80;
+    }
+
+    .status.error {
+      color: #f87171;
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 1.25rem 1rem 2rem;
+      }
+
+      .panel {
+        padding: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Video Highlights</h1>
+      <p>Paste a video link or upload a file from your computer. Add a description for each highlight.</p>
+    </header>
+
+    <section class="panel">
+      <h2>Add a Highlight</h2>
+
+      <div class="source-tabs" role="tablist">
+        <button type="button" class="source-tab active" data-source="link" role="tab" aria-selected="true">Video link</button>
+        <button type="button" class="source-tab" data-source="upload" role="tab" aria-selected="false">Upload from computer</button>
+      </div>
+
+      <form id="add-form" class="form-grid">
+        <div id="link-fields">
+          <label for="video-url">Video URL</label>
+          <input type="url" id="video-url" name="video-url" placeholder="https://www.youtube.com/watch?v=...">
+          <p class="hint">Supports YouTube, Vimeo, or a direct link to an .mp4 / .webm file in this repo.</p>
+        </div>
+
+        <div id="upload-fields" class="hidden">
+          <label>Video file</label>
+          <label class="file-drop" id="file-drop" for="video-file">
+            <strong>Choose a video or drag it here</strong>
+            <span>MP4, WebM, MOV, and other common formats</span>
+            <input type="file" id="video-file" accept="video/*" hidden>
+          </label>
+          <p id="selected-file" class="file-name"></p>
+          <p class="hint">Uploaded videos are saved in your browser. Use Download video on each card to save files for GitHub.</p>
+        </div>
+
+        <div>
+          <label for="description">Description</label>
+          <textarea id="description" name="description" placeholder="What happened in this highlight?" required></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary">Add Highlight</button>
+        </div>
+      </form>
+      <p id="form-status" class="status" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <div class="toolbar">
+        <h2>Your Highlights</h2>
+        <div class="actions">
+          <span id="highlight-count" class="count">0 highlights</span>
+          <button type="button" id="export-btn" class="btn-secondary">Download JSON</button>
+          <button type="button" id="reload-btn" class="btn-secondary">Reload from file</button>
+          <label class="btn-secondary" style="display:inline-block; cursor:pointer;">
+            Import JSON
+            <input type="file" id="import-input" accept="application/json,.json" hidden>
+          </label>
+        </div>
+      </div>
+      <div id="highlights-grid" class="grid"></div>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "video-highlights";
+    const DB_NAME = "video-highlights-db";
+    const STORE_NAME = "videos";
+
+    const highlights = [];
+    const blobUrlCache = new Map();
+    let activeSource = "link";
+    let selectedFile = null;
+
+    const form = document.getElementById("add-form");
+    const grid = document.getElementById("highlights-grid");
+    const countEl = document.getElementById("highlight-count");
+    const formStatus = document.getElementById("form-status");
+    const exportBtn = document.getElementById("export-btn");
+    const reloadBtn = document.getElementById("reload-btn");
+    const importInput = document.getElementById("import-input");
+    const linkFields = document.getElementById("link-fields");
+    const uploadFields = document.getElementById("upload-fields");
+    const fileDrop = document.getElementById("file-drop");
+    const videoFileInput = document.getElementById("video-file");
+    const selectedFileEl = document.getElementById("selected-file");
+    const sourceTabs = document.querySelectorAll(".source-tab");
+
+    function setStatus(message, type = "") {
+      formStatus.textContent = message;
+      formStatus.className = "status" + (type ? ` ${type}` : "");
+    }
+
+    function createId() {
+      return crypto.randomUUID ? crypto.randomUUID() : `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function escapeAttr(text) {
+      return escapeHtml(text).replaceAll("`", "&#96;");
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function openDb() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = () => {
+          request.result.createObjectStore(STORE_NAME);
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function saveVideoBlob(id, blob) {
+      const db = await openDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        tx.objectStore(STORE_NAME).put(blob, id);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function loadVideoBlob(id) {
+      const db = await openDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readonly");
+        const request = tx.objectStore(STORE_NAME).get(id);
+        request.onsuccess = () => resolve(request.result || null);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function deleteVideoBlob(id) {
+      const db = await openDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        tx.objectStore(STORE_NAME).delete(id);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    function revokeBlobUrl(id) {
+      const url = blobUrlCache.get(id);
+      if (url) {
+        URL.revokeObjectURL(url);
+        blobUrlCache.delete(id);
+      }
+    }
+
+    function revokeAllBlobUrls() {
+      blobUrlCache.forEach((url) => URL.revokeObjectURL(url));
+      blobUrlCache.clear();
+    }
+
+    function saveToStorage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(highlights));
+    }
+
+    function parseVideoUrl(url) {
+      const trimmed = url.trim();
+
+      const youtubeMatch = trimmed.match(
+        /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/
+      );
+      if (youtubeMatch) {
+        return {
+          type: "iframe",
+          src: `https://www.youtube.com/embed/${youtubeMatch[1]}`
+        };
+      }
+
+      const vimeoMatch = trimmed.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+      if (vimeoMatch) {
+        return {
+          type: "iframe",
+          src: `https://player.vimeo.com/video/${vimeoMatch[1]}`
+        };
+      }
+
+      return { type: "video", src: trimmed };
+    }
+
+    async function getMediaForHighlight(item) {
+      if (item.source === "upload") {
+        if (!blobUrlCache.has(item.id)) {
+          const blob = await loadVideoBlob(item.id);
+          if (!blob) return null;
+          blobUrlCache.set(item.id, URL.createObjectURL(blob));
+        }
+        return { type: "video", src: blobUrlCache.get(item.id) };
+      }
+
+      return parseVideoUrl(item.url);
+    }
+
+    async function render() {
+      revokeAllBlobUrls();
+      grid.innerHTML = "";
+
+      if (highlights.length === 0) {
+        grid.innerHTML = '<div class="empty">No highlights yet. Add your first video above.</div>';
+      } else {
+        for (const item of highlights) {
+          const media = await getMediaForHighlight(item);
+          const card = document.createElement("article");
+          card.className = "card";
+          card.dataset.id = item.id;
+
+          let videoHtml = '<div class="video-wrap"><p style="padding:1rem;color:#f87171;">Video unavailable</p></div>';
+          if (media) {
+            videoHtml = media.type === "iframe"
+              ? `<div class="video-wrap"><iframe src="${media.src}" title="${escapeHtml(item.description)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`
+              : `<div class="video-wrap"><video src="${escapeAttr(media.src)}" controls preload="metadata"></video></div>`;
+          }
+
+          const badge = item.source === "upload"
+            ? `<span class="badge upload">Uploaded${item.fileName ? ` · ${escapeHtml(item.fileName)}` : ""}</span>`
+            : `<span class="badge">Link</span>`;
+
+          const downloadBtn = item.source === "upload"
+            ? `<button type="button" class="btn-secondary" data-action="download">Download video</button>`
+            : "";
+
+          card.innerHTML = `
+            ${videoHtml}
+            <div class="card-body">
+              ${badge}
+              <p>${escapeHtml(item.description)}</p>
+              <div class="card-actions">
+                ${downloadBtn}
+                <button type="button" class="btn-danger" data-action="delete">Remove</button>
+              </div>
+            </div>
+          `;
+
+          const deleteBtn = card.querySelector('[data-action="delete"]');
+          deleteBtn.addEventListener("click", () => removeHighlight(item.id));
+
+          const downloadButton = card.querySelector('[data-action="download"]');
+          if (downloadButton) {
+            downloadButton.addEventListener("click", () => downloadHighlightVideo(item));
+          }
+
+          grid.appendChild(card);
+        }
+      }
+
+      countEl.textContent = `${highlights.length} highlight${highlights.length === 1 ? "" : "s"}`;
+    }
+
+    function normalizeHighlight(item) {
+      return {
+        id: item.id || createId(),
+        source: item.source === "upload" ? "upload" : "link",
+        url: item.url || "",
+        fileName: item.fileName || "",
+        mimeType: item.mimeType || "",
+        description: item.description || "",
+        addedAt: item.addedAt || new Date().toISOString()
+      };
+    }
+
+    async function addLinkHighlight(url, description) {
+      highlights.unshift(normalizeHighlight({
+        id: createId(),
+        source: "link",
+        url: url.trim(),
+        description: description.trim()
+      }));
+      saveToStorage();
+      await render();
+    }
+
+    async function addUploadHighlight(file, description) {
+      const id = createId();
+      await saveVideoBlob(id, file);
+
+      highlights.unshift(normalizeHighlight({
+        id,
+        source: "upload",
+        fileName: file.name,
+        mimeType: file.type,
+        description: description.trim()
+      }));
+
+      saveToStorage();
+      await render();
+    }
+
+    async function removeHighlight(id) {
+      const index = highlights.findIndex((item) => item.id === id);
+      if (index === -1) return;
+
+      const item = highlights[index];
+      if (item.source === "upload") {
+        await deleteVideoBlob(id);
+        revokeBlobUrl(id);
+      }
+
+      highlights.splice(index, 1);
+      saveToStorage();
+      await render();
+    }
+
+    async function replaceHighlights(items) {
+      highlights.length = 0;
+      items.forEach((item) => highlights.push(normalizeHighlight(item)));
+      saveToStorage();
+      await render();
+    }
+
+    async function downloadHighlightVideo(item) {
+      const blob = await loadVideoBlob(item.id);
+      if (!blob) {
+        setStatus("Could not find the uploaded video in this browser.", "error");
+        return;
+      }
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = item.fileName || `highlight-${item.id}.mp4`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    function exportHighlightsJson() {
+      return highlights.map((item) => {
+        if (item.source === "upload") {
+          return {
+            id: item.id,
+            source: "upload",
+            url: `videos/${item.fileName || `highlight-${item.id}.mp4`}`,
+            fileName: item.fileName,
+            description: item.description,
+            addedAt: item.addedAt
+          };
+        }
+
+        return {
+          id: item.id,
+          source: "link",
+          url: item.url,
+          description: item.description,
+          addedAt: item.addedAt
+        };
+      });
+    }
+
+    async function loadFromJsonFile() {
+      const response = await fetch("highlights.json", { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error("Could not load highlights.json");
+      }
+      const data = await response.json();
+      if (!Array.isArray(data)) {
+        throw new Error("highlights.json must contain an array");
+      }
+      return data;
+    }
+
+    async function initialize() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (parsed.length > 0) {
+            await replaceHighlights(parsed);
+            return;
+          }
+        } catch {
+          localStorage.removeItem(STORAGE_KEY);
+        }
+      }
+
+      try {
+        const fileData = await loadFromJsonFile();
+        await replaceHighlights(fileData);
+      } catch {
+        await render();
+      }
+    }
+
+    function setActiveSource(source) {
+      activeSource = source;
+      sourceTabs.forEach((tab) => {
+        const isActive = tab.dataset.source === source;
+        tab.classList.toggle("active", isActive);
+        tab.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      linkFields.classList.toggle("hidden", source !== "link");
+      uploadFields.classList.toggle("hidden", source !== "upload");
+    }
+
+    function setSelectedFile(file) {
+      selectedFile = file;
+      if (file) {
+        selectedFileEl.textContent = `Selected: ${file.name} (${formatFileSize(file.size)})`;
+      } else {
+        selectedFileEl.textContent = "";
+      }
+    }
+
+    sourceTabs.forEach((tab) => {
+      tab.addEventListener("click", () => setActiveSource(tab.dataset.source));
+    });
+
+    fileDrop.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      fileDrop.classList.add("dragover");
+    });
+
+    fileDrop.addEventListener("dragleave", () => {
+      fileDrop.classList.remove("dragover");
+    });
+
+    fileDrop.addEventListener("drop", (event) => {
+      event.preventDefault();
+      fileDrop.classList.remove("dragover");
+      const file = event.dataTransfer.files[0];
+      if (file && file.type.startsWith("video/")) {
+        setSelectedFile(file);
+      } else {
+        setStatus("Please drop a valid video file.", "error");
+      }
+    });
+
+    videoFileInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      setSelectedFile(file || null);
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const description = document.getElementById("description").value.trim();
+
+      if (!description) {
+        setStatus("Please add a description.", "error");
+        return;
+      }
+
+      try {
+        if (activeSource === "link") {
+          const url = document.getElementById("video-url").value.trim();
+          if (!url) {
+            setStatus("Please provide a video URL.", "error");
+            return;
+          }
+          await addLinkHighlight(url, description);
+        } else {
+          if (!selectedFile) {
+            setStatus("Please choose a video file to upload.", "error");
+            return;
+          }
+          await addUploadHighlight(selectedFile, description);
+          videoFileInput.value = "";
+          setSelectedFile(null);
+        }
+
+        form.reset();
+        setStatus("Highlight added.", "success");
+      } catch (error) {
+        setStatus(error.message || "Could not save the highlight.", "error");
+      }
+    });
+
+    exportBtn.addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(exportHighlightsJson(), null, 2)], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "highlights.json";
+      link.click();
+      URL.revokeObjectURL(link.href);
+
+      const hasUploads = highlights.some((item) => item.source === "upload");
+      const message = hasUploads
+        ? "Downloaded highlights.json. Also download each uploaded video and place them in a videos/ folder before committing."
+        : "Downloaded highlights.json. Commit this file to save changes on GitHub.";
+      setStatus(message, "success");
+    });
+
+    reloadBtn.addEventListener("click", async () => {
+      try {
+        const fileData = await loadFromJsonFile();
+        await replaceHighlights(fileData);
+        setStatus("Reloaded highlights from highlights.json.", "success");
+      } catch (error) {
+        setStatus(error.message, "error");
+      }
+    });
+
+    importInput.addEventListener("change", async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        if (!Array.isArray(data)) {
+          throw new Error("JSON file must contain an array of highlights");
+        }
+        await replaceHighlights(data);
+        setStatus("Imported highlights from JSON file.", "success");
+      } catch (error) {
+        setStatus(error.message, "error");
+      } finally {
+        importInput.value = "";
+      }
+    });
+
+    initialize();
+  </script>
+</body>
+</html>
