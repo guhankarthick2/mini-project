@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guhan Highlights</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface-hover: #243044;
+      --border: #2d3a4f;
+      --text: #e8edf4;
+      --muted: #8b9cb3;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --danger: #ef4444;
+      --success: #4ade80;
+      --radius: 12px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    header h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .panel h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-grid { display: grid; gap: 1rem; }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--muted);
+    }
+
+    input[type="url"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 0.75rem 0.9rem;
+      font: inherit;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.1rem;
+      font-weight: 600;
+    }
+
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary {
+      background: var(--surface-hover);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: #2c3b52; }
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 0.45rem 0.8rem;
+      font-size: 0.85rem;
+    }
+    .btn-danger:hover { background: var(--danger); color: white; }
+    .btn-link {
+      background: none;
+      border: none;
+      color: var(--muted);
+      padding: 0;
+      font-size: 0.8rem;
+      text-decoration: underline;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .toolbar h2 { margin: 0; }
+    .count { color: var(--muted); font-size: 0.9rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .video-wrap iframe,
+    .video-wrap video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 1rem 1.1rem 1.1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .card-body p {
+      flex: 1;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      color: var(--muted);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      grid-column: 1 / -1;
+    }
+
+    .status {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      min-height: 1.25rem;
+    }
+
+    .status.success { color: var(--success); }
+    .status.error { color: #f87171; }
+
+    .hidden { display: none !important; }
+
+    .admin-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      background: #172554;
+      border: 1px solid #1d4ed8;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 400px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .modal h2 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Guhan Highlights</h1>
+      <p>Match highlights and best moments</p>
+    </header>
+
+    <div id="admin-banner" class="admin-banner hidden">
+      <span>Admin mode — you can add and remove highlights</span>
+      <div class="actions">
+        <button type="button" id="export-btn" class="btn-secondary">Download JSON</button>
+        <button type="button" id="logout-btn" class="btn-secondary">Log out</button>
+      </div>
+    </div>
+
+    <section id="admin-panel" class="panel hidden">
+      <h2>Add Highlight (Admin)</h2>
+      <form id="add-form" class="form-grid">
+        <div>
+          <label for="video-url">Video URL</label>
+          <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=... or videos/clip.mp4" required>
+          <p class="hint">YouTube, Vimeo, or a path to a video in this repo (e.g. videos/my-clip.mp4).</p>
+        </div>
+        <div>
+          <label for="description">Description</label>
+          <textarea id="description" placeholder="What happened in this highlight?" required></textarea>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn-primary">Add Highlight</button>
+        </div>
+      </form>
+      <p id="form-status" class="status" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <div class="toolbar">
+        <h2>Highlights</h2>
+        <span id="highlight-count" class="count">0 highlights</span>
+      </div>
+      <div id="highlights-grid" class="grid"></div>
+    </section>
+
+    <footer>
+      <button type="button" id="admin-login-btn" class="btn-link">Admin</button>
+    </footer>
+  </div>
+
+  <div id="login-modal" class="modal-backdrop hidden">
+    <div class="modal" role="dialog" aria-labelledby="login-title">
+      <h2 id="login-title">Admin Login</h2>
+      <form id="login-form" class="form-grid">
+        <div>
+          <label for="admin-password">Password</label>
+          <input type="password" id="admin-password" autocomplete="current-password" required>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn-primary">Unlock</button>
+          <button type="button" id="cancel-login-btn" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+      <p id="login-status" class="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_SESSION_KEY = "guhan-highlights-admin";
+    const ADMIN_PASSWORD_HASH = "15b1bc11d3fb09cc46b6464f983f1d04a7204a4bbf6df0b78e584b212c0bb4e9";
+
+    const highlights = [];
+    let isAdmin = false;
+
+    const grid = document.getElementById("highlights-grid");
+    const countEl = document.getElementById("highlight-count");
+    const adminPanel = document.getElementById("admin-panel");
+    const adminBanner = document.getElementById("admin-banner");
+    const adminLoginBtn = document.getElementById("admin-login-btn");
+    const loginModal = document.getElementById("login-modal");
+    const loginForm = document.getElementById("login-form");
+    const loginStatus = document.getElementById("login-status");
+    const cancelLoginBtn = document.getElementById("cancel-login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const addForm = document.getElementById("add-form");
+    const formStatus = document.getElementById("form-status");
+    const exportBtn = document.getElementById("export-btn");
+
+    async function hashPassword(password) {
+      const data = new TextEncoder().encode(password);
+      const hash = await crypto.subtle.digest("SHA-256", data);
+      return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    function setFormStatus(message, type = "") {
+      formStatus.textContent = message;
+      formStatus.className = "status" + (type ? ` ${type}` : "");
+    }
+
+    function setLoginStatus(message, type = "") {
+      loginStatus.textContent = message;
+      loginStatus.className = "status" + (type ? ` ${type}` : "");
+    }
+
+    function createId() {
+      return crypto.randomUUID ? crypto.randomUUID() : `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function escapeAttr(text) {
+      return escapeHtml(text).replaceAll("`", "&#96;");
+    }
+
+    function parseVideoUrl(url) {
+      const trimmed = url.trim();
+
+      const youtubeMatch = trimmed.match(
+        /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/
+      );
+      if (youtubeMatch) {
+        return { type: "iframe", src: `https://www.youtube.com/embed/${youtubeMatch[1]}` };
+      }
+
+      const vimeoMatch = trimmed.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+      if (vimeoMatch) {
+        return { type: "iframe", src: `https://player.vimeo.com/video/${vimeoMatch[1]}` };
+      }
+
+      return { type: "video", src: trimmed };
+    }
+
+    function normalizeHighlight(item) {
+      return {
+        id: item.id || createId(),
+        url: item.url || "",
+        description: item.description || "",
+        addedAt: item.addedAt || new Date().toISOString()
+      };
+    }
+
+    function render() {
+      grid.innerHTML = "";
+
+      if (highlights.length === 0) {
+        grid.innerHTML = '<div class="empty">No highlights yet.</div>';
+      } else {
+        highlights.forEach((item) => {
+          const media = parseVideoUrl(item.url);
+          const card = document.createElement("article");
+          card.className = "card";
+
+          const videoHtml = media.type === "iframe"
+            ? `<iframe src="${media.src}" title="${escapeHtml(item.description)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`
+            : `<video src="${escapeAttr(media.src)}" controls preload="metadata"></video>`;
+
+          const removeBtn = isAdmin
+            ? `<button type="button" class="btn-danger" data-action="delete">Remove</button>`
+            : "";
+
+          card.innerHTML = `
+            <div class="video-wrap">${videoHtml}</div>
+            <div class="card-body">
+              <p>${escapeHtml(item.description)}</p>
+              ${removeBtn}
+            </div>
+          `;
+
+          const deleteBtn = card.querySelector('[data-action="delete"]');
+          if (deleteBtn) {
+            deleteBtn.addEventListener("click", () => removeHighlight(item.id));
+          }
+
+          grid.appendChild(card);
+        });
+      }
+
+      countEl.textContent = `${highlights.length} highlight${highlights.length === 1 ? "" : "s"}`;
+    }
+
+    function setAdminMode(enabled) {
+      isAdmin = enabled;
+      adminPanel.classList.toggle("hidden", !enabled);
+      adminBanner.classList.toggle("hidden", !enabled);
+      adminLoginBtn.classList.toggle("hidden", enabled);
+
+      if (enabled) {
+        sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+      } else {
+        sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      }
+
+      render();
+    }
+
+    function showLoginModal() {
+      loginModal.classList.remove("hidden");
+      document.getElementById("admin-password").focus();
+      setLoginStatus("");
+    }
+
+    function hideLoginModal() {
+      loginModal.classList.add("hidden");
+      loginForm.reset();
+      setLoginStatus("");
+    }
+
+    async function loadHighlights() {
+      const response = await fetch("highlights.json", { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error("Could not load highlights.json");
+      }
+      const data = await response.json();
+      if (!Array.isArray(data)) {
+        throw new Error("highlights.json must contain an array");
+      }
+      highlights.length = 0;
+      data.forEach((item) => highlights.push(normalizeHighlight(item)));
+      render();
+    }
+
+    function addHighlight(url, description) {
+      highlights.unshift(normalizeHighlight({
+        id: createId(),
+        url: url.trim(),
+        description: description.trim()
+      }));
+      render();
+      setFormStatus("Highlight added. Download JSON and commit to publish changes.", "success");
+    }
+
+    function removeHighlight(id) {
+      const index = highlights.findIndex((item) => item.id === id);
+      if (index === -1) return;
+      highlights.splice(index, 1);
+      render();
+      setFormStatus("Highlight removed. Download JSON and commit to publish changes.", "success");
+    }
+
+    function exportHighlightsJson() {
+      return highlights.map((item) => ({
+        id: item.id,
+        url: item.url,
+        description: item.description,
+        addedAt: item.addedAt
+      }));
+    }
+
+    adminLoginBtn.addEventListener("click", showLoginModal);
+    cancelLoginBtn.addEventListener("click", hideLoginModal);
+    loginModal.addEventListener("click", (event) => {
+      if (event.target === loginModal) hideLoginModal();
+    });
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const password = document.getElementById("admin-password").value;
+      const hash = await hashPassword(password);
+
+      if (hash === ADMIN_PASSWORD_HASH) {
+        setAdminMode(true);
+        hideLoginModal();
+      } else {
+        setLoginStatus("Incorrect password.", "error");
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      setAdminMode(false);
+      setFormStatus("");
+    });
+
+    addForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const url = document.getElementById("video-url").value.trim();
+      const description = document.getElementById("description").value.trim();
+
+      if (!url || !description) {
+        setFormStatus("Please provide both a video URL and description.", "error");
+        return;
+      }
+
+      addHighlight(url, description);
+      addForm.reset();
+    });
+
+    exportBtn.addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(exportHighlightsJson(), null, 2)], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "highlights.json";
+      link.click();
+      URL.revokeObjectURL(link.href);
+      setFormStatus("Downloaded highlights.json — replace the file in your repo and push.", "success");
+    });
+
+    async function initialize() {
+      try {
+        await loadHighlights();
+      } catch (error) {
+        grid.innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
+      }
+
+      if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "1") {
+        setAdminMode(true);
+      }
+
+      if (new URLSearchParams(location.search).has("admin")) {
+        showLoginModal();
+      }
+    }
+
+    initialize();
+  </script>
+</body>
+</html>
