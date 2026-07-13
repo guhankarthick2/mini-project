@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geometry Math Quest</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["\\(", "\\)"], ["$", "$"]], displayMath: [["\\[", "\\]"]] },
+      svg: { fontCache: "global" },
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --surface: #151d33;
+      --surface-hover: #1c2742;
+      --border: #2a3658;
+      --text: #eef2ff;
+      --muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-soft: rgba(99, 102, 241, 0.15);
+      --success: #34d399;
+      --danger: #f87171;
+      --warning: #fbbf24;
+      --radius: 14px;
+      --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(ellipse at top, #1a1f3a 0%, var(--bg) 55%);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+
+    .page { max-width: 960px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+
+    header { text-align: center; margin-bottom: 2rem; }
+    header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #a5b4fc, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header p { color: var(--muted); margin-top: 0.5rem; max-width: 640px; margin-inline: auto; }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .panel h2 { font-size: 1.05rem; margin-bottom: 1rem; }
+    .panel h3 { font-size: 0.95rem; color: var(--muted); margin-bottom: 0.75rem; font-weight: 600; }
+
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .topic-card {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .topic-card:hover { border-color: #4f46e5; background: var(--surface-hover); }
+    .topic-card.selected { border-color: var(--accent); background: var(--accent-soft); }
+    .topic-card h3 { color: var(--text); font-size: 1rem; margin-bottom: 0.35rem; }
+    .topic-card p { font-size: 0.82rem; color: var(--muted); }
+
+    .subtopic-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.5rem;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      padding: 0.45rem 0.55rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .check-item:hover { background: var(--surface-hover); }
+    .check-item input { margin-top: 0.2rem; accent-color: var(--accent); }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+    label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--muted); margin-bottom: 0.4rem; }
+
+    input[type="number"], input[type="text"], select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 0.7rem 0.85rem;
+      font: inherit;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--accent); }
+
+    .mode-toggle {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .mode-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 600;
+      text-align: left;
+    }
+    .mode-btn small { display: block; font-weight: 400; color: var(--muted); margin-top: 0.2rem; font-size: 0.78rem; }
+    .mode-btn.active { border-color: var(--accent); background: var(--accent-soft); }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.15rem;
+      font-weight: 600;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: #243352; }
+    .btn-success { background: #059669; color: white; }
+    .btn-success:hover { background: #047857; }
+
+    .hidden { display: none !important; }
+
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #818cf8);
+      transition: width 0.25s;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-hard { background: rgba(251, 191, 36, 0.2); color: var(--warning); }
+    .badge-challenge { background: rgba(248, 113, 113, 0.2); color: var(--danger); }
+
+    .prompt {
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0.75rem auto 1rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .answer-box { margin-top: 1rem; }
+    .answer-box input { font-size: 1.05rem; }
+
+    .feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .feedback.correct { border-color: var(--success); background: rgba(52, 211, 153, 0.1); }
+    .feedback.incorrect { border-color: var(--danger); background: rgba(248, 113, 113, 0.1); }
+    .feedback h4 { font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .feedback .answer-key { color: var(--success); font-weight: 700; }
+    .explanation { color: var(--muted); font-size: 0.92rem; margin-top: 0.5rem; line-height: 1.65; }
+    .explanation strong { color: var(--text); }
+
+    .score-ring {
+      text-align: center;
+      padding: 1.5rem;
+    }
+    .score-ring .percent {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .results-list { display: grid; gap: 1rem; }
+    .result-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+    .result-item.correct-item { border-left: 4px solid var(--success); }
+    .result-item.wrong-item { border-left: 4px solid var(--danger); }
+
+    .hint { font-size: 0.85rem; color: var(--warning); margin-top: 0.75rem; font-style: italic; }
+
+    .select-all-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .select-all-row button {
+      font-size: 0.8rem;
+      padding: 0.35rem 0.7rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Geometry Math Quest</h1>
+      <p>Hard geometry practice for ambitious students — triangles, quadrilaterals, and n-gons with full answer keys and step-by-step explanations.</p>
+    </header>
+
+    <!-- Setup Screen -->
+    <section id="setup-screen">
+      <div class="panel">
+        <h2>1. Choose a topic</h2>
+        <div class="topic-grid" id="topic-grid"></div>
+      </div>
+
+      <div class="panel">
+        <h2>2. Select subtopics</h2>
+        <div class="select-all-row">
+          <button type="button" class="btn-secondary" id="select-all-btn">Select all</button>
+          <button type="button" class="btn-secondary" id="clear-all-btn">Clear all</button>
+        </div>
+        <div class="subtopic-list" id="subtopic-list"></div>
+      </div>
+
+      <div class="panel">
+        <h2>3. Quiz settings</h2>
+        <div class="form-row" style="margin-bottom: 1.25rem;">
+          <div>
+            <label for="question-count">Number of questions</label>
+            <input type="number" id="question-count" min="1" max="30" value="10">
+          </div>
+          <div>
+            <label for="difficulty-note">Difficulty</label>
+            <input type="text" id="difficulty-note" value="Hard + AMC/MAO challenges" disabled>
+          </div>
+        </div>
+
+        <h3>Mode</h3>
+        <div class="mode-toggle">
+          <button type="button" class="mode-btn active" data-mode="practice">
+            Practice
+            <small>See answer & explanation after each question</small>
+          </button>
+          <button type="button" class="mode-btn" data-mode="test">
+            Test
+            <small>Answer all questions first, then review the answer key</small>
+          </button>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn-primary" id="start-btn">Start Quiz</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz Screen -->
+    <section id="quiz-screen" class="hidden">
+      <div class="panel">
+        <div class="question-header">
+          <span id="quiz-progress-text">Question 1 of 10</span>
+          <span id="quiz-mode-label"></span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+        <div id="question-area"></div>
+
+        <div class="actions" id="quiz-actions"></div>
+      </div>
+    </section>
+
+    <!-- Results Screen -->
+    <section id="results-screen" class="hidden">
+      <div class="panel score-ring">
+        <div class="percent" id="score-percent">0%</div>
+        <p id="score-summary">0 of 0 correct</p>
+      </div>
+
+      <div class="panel">
+        <h2>Answer Key & Explanations</h2>
+        <div class="results-list" id="results-list"></div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-primary" id="restart-btn">New Quiz</button>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="js/ui.js"></script>
+</body>
+</html>
