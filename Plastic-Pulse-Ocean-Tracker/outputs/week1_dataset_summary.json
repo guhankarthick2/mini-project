@@ -1,0 +1,51 @@
+{
+  "project": "Plastic-Pulse Ocean Tracker",
+  "week": 1,
+  "deliverable": "cleaned_and_augmented_dataset",
+  "target_size": [
+    224,
+    224
+  ],
+  "normalization": "min-max to [0, 1] via /255",
+  "augmentations": [
+    "horizontal_flip",
+    "vertical_flip",
+    "rotate_+15",
+    "rotate_-15",
+    "rotate_+30"
+  ],
+  "classes": [
+    {
+      "class": "marine_life",
+      "raw_images": 40,
+      "processed_images": 40,
+      "augmented_images": 240,
+      "pixel_min": 0.003921568859368563,
+      "pixel_max": 1.0,
+      "input_shape": [
+        224,
+        224,
+        3
+      ]
+    },
+    {
+      "class": "plastic_debris",
+      "raw_images": 40,
+      "processed_images": 40,
+      "augmented_images": 240,
+      "pixel_min": 0.062745101749897,
+      "pixel_max": 1.0,
+      "input_shape": [
+        224,
+        224,
+        3
+      ]
+    }
+  ],
+  "paths": {
+    "raw": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\raw",
+    "processed": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\processed",
+    "augmented": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\augmented",
+    "preview": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week1_augmentation_preview.png"
+  }
+}

@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+outputs/*.png
+# Keep summary JSON trackable; ignore bulky binaries if needed later
+data/raw/**/*.jpg
+data/raw/**/*.png
+data/processed/
+data/augmented/
