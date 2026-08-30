@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 2 Deliverable — Plastic-Pulse Ocean Tracker</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #121a2b;
+      --line: #243049;
+      --text: #e8eefc;
+      --muted: #9db0d0;
+      --accent: #38bdf8;
+      --green: #34d399;
+      --amber: #fbbf24;
+      --pink: #f472b6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, system-ui, sans-serif;
+      background: radial-gradient(1200px 600px at 10% -10%, #1e3a5f 0%, var(--bg) 55%);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { font-size: 1.25rem; margin: 0 0 14px; color: var(--accent); }
+    .sub { color: var(--muted); margin-bottom: 28px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); margin-bottom: 20px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .card.wide { grid-column: 1 / -1; }
+    .stat { font-size: 1.8rem; font-weight: 700; }
+    .label { color: var(--muted); font-size: .9rem; }
+    .frozen { color: var(--amber); }
+    .train { color: var(--green); }
+    table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 600; }
+    tr.highlight td { background: rgba(52, 211, 153, .08); }
+    tr.backbone td { background: rgba(251, 191, 36, .08); }
+    code, pre {
+      font-family: Consolas, ui-monospace, monospace;
+      background: #0a101c;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+    code { padding: 2px 6px; }
+    pre { padding: 14px; overflow-x: auto; white-space: pre; color: #d7e3ff; }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: .8rem;
+      border: 1px solid var(--line);
+      margin-right: 6px;
+      color: var(--muted);
+    }
+    .badge.on { color: var(--green); border-color: rgba(52,211,153,.4); }
+    .badge.off { color: var(--amber); border-color: rgba(251,191,36,.4); }
+    .flow {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      font-size: .95rem;
+    }
+    .pill {
+      background: #182338;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+    }
+    .pill.dense { border-color: rgba(52,211,153,.5); color: var(--green); }
+    .arrow { color: var(--muted); }
+    .nav { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px; }
+    .nav a {
+      color: var(--text);
+      text-decoration: none;
+      background: #182338;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+    .nav a:hover { border-color: var(--accent); color: var(--accent); }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: white; color: black; }
+      .card { box-shadow: none; border-color: #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <a href="#summary">1. Summary table</a>
+      <a href="#params">2. Trainable vs frozen</a>
+      <a href="#head">3. Dense head</a>
+      <a href="#demo">4. Live demo command</a>
+    </div>
+
+    <h1>Week 2 Deliverable</h1>
+    <p class="sub">Plastic-Pulse Ocean Tracker — compiled TensorFlow/Keras architecture<br>
+      Frozen <strong>MobileNetV2</strong> feature extractor + custom <strong>Dense</strong> binary head
+      (Marine Life vs Plastic Debris)</p>
+
+    <div class="grid" id="params">
+      <div class="card">
+        <div class="label">Total params</div>
+        <div class="stat">2,422,081</div>
+      </div>
+      <div class="card">
+        <div class="label train">Trainable (custom head)</div>
+        <div class="stat train">164,097</div>
+      </div>
+      <div class="card">
+        <div class="label frozen">Non-trainable (frozen backbone)</div>
+        <div class="stat frozen">2,257,984</div>
+      </div>
+    </div>
+
+    <div class="card wide" style="margin-bottom:20px">
+      <h2>Model flow</h2>
+      <div class="flow">
+        <span class="pill">Input 224×224×3</span><span class="arrow">→</span>
+        <span class="pill">MobileNetV2 <span class="badge off">frozen</span></span><span class="arrow">→</span>
+        <span class="pill">GAP</span><span class="arrow">→</span>
+        <span class="pill">Dropout</span><span class="arrow">→</span>
+        <span class="pill dense">Dense(128, ReLU)</span><span class="arrow">→</span>
+        <span class="pill">Dropout</span><span class="arrow">→</span>
+        <span class="pill dense">Dense(1, sigmoid)</span>
+      </div>
+      <p style="color:var(--muted);margin:14px 0 0">
+        Output: probability of <code>plastic_debris</code>
+        (<span class="badge">0 = marine_life</span>
+        <span class="badge">1 = plastic_debris</span>
+      </p>
+    </div>
+
+    <div class="card wide" id="summary" style="margin-bottom:20px">
+      <h2>1. Architecture summary table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Type</th>
+            <th>Output shape</th>
+            <th>Params</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>image</td>
+            <td>InputLayer</td>
+            <td>(None, 224, 224, 3)</td>
+            <td>0</td>
+            <td><span class="badge">input</span></td>
+          </tr>
+          <tr>
+            <td>mobilenetv2_preprocess</td>
+            <td>Lambda</td>
+            <td>(None, 224, 224, 3)</td>
+            <td>0</td>
+            <td><span class="badge">preprocess</span></td>
+          </tr>
+          <tr class="backbone">
+            <td>mobilenetv2_1.00_224</td>
+            <td>Functional (ImageNet)</td>
+            <td>(None, 7, 7, 1280)</td>
+            <td>2,257,984</td>
+            <td><span class="badge off">frozen</span></td>
+          </tr>
+          <tr>
+            <td>gap_features</td>
+            <td>GlobalAveragePooling2D</td>
+            <td>(None, 1280)</td>
+            <td>0</td>
+            <td><span class="badge on">head</span></td>
+          </tr>
+          <tr>
+            <td>dropout_1</td>
+            <td>Dropout</td>
+            <td>(None, 1280)</td>
+            <td>0</td>
+            <td><span class="badge on">head</span></td>
+          </tr>
+          <tr class="highlight">
+            <td><strong>dense_features</strong></td>
+            <td><strong>Dense(128, ReLU)</strong></td>
+            <td>(None, 128)</td>
+            <td>163,968</td>
+            <td><span class="badge on">trainable Dense</span></td>
+          </tr>
+          <tr>
+            <td>dropout_2</td>
+            <td>Dropout</td>
+            <td>(None, 128)</td>
+            <td>0</td>
+            <td><span class="badge on">head</span></td>
+          </tr>
+          <tr class="highlight">
+            <td><strong>plastic_probability</strong></td>
+            <td><strong>Dense(1, sigmoid)</strong></td>
+            <td>(None, 1)</td>
+            <td>129</td>
+            <td><span class="badge on">trainable Dense</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card wide" id="head" style="margin-bottom:20px">
+      <h2>3. Custom Dense head (from <code>models/classifier.py</code>)</h2>
+      <pre>x = layers.GlobalAveragePooling2D(name="gap_features")(x)
+x = layers.Dropout(dropout, name="dropout_1")(x)
+x = layers.Dense(dense_units, activation="relu", name="dense_features")(x)   # Dense #1
+x = layers.Dropout(dropout, name="dropout_2")(x)
+outputs = layers.Dense(1, activation="sigmoid", name="plastic_probability")(x)  # Dense #2</pre>
+      <p style="color:var(--muted);margin:12px 0 0">
+        Compiled with Adam, <code>binary_crossentropy</code>, and metrics:
+        accuracy / precision / recall / AUC.
+      </p>
+    </div>
+
+    <div class="card wide" id="demo">
+      <h2>4. Live demo command</h2>
+      <p style="color:var(--muted)">In PowerShell, from the project folder:</p>
+      <pre>cd C:\Users\hickk\mini-project\Plastic-Pulse-Ocean-Tracker
+.\.venv\Scripts\Activate.ps1
+python scripts/build_model.py --backbone mobilenetv2</pre>
+      <p style="color:var(--muted);margin-top:12px">
+        Optional save: <code>python scripts/build_model.py --backbone mobilenetv2 --save</code><br>
+        Compiled model file: <code>models\saved\PlasticPulse_mobilenetv2_classifier.keras</code>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

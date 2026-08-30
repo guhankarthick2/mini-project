@@ -1,0 +1,154 @@
+{
+  "timestamp": "2026-08-29T00:53:06.936154+00:00",
+  "n_images": 8,
+  "n_with_labels": 8,
+  "accuracy": 1.0,
+  "results": [
+    {
+      "label": "marine_life",
+      "label_display": "Marine Life",
+      "prob_plastic": 1.5929829899619108e-08,
+      "confidence": 0.9999999840701701,
+      "label_idx": 0,
+      "box": [
+        50,
+        5,
+        182,
+        224
+      ],
+      "true_class": "marine_life",
+      "correct": true,
+      "source": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\augmented\\marine_life\\marine_life_00002__orig.jpg",
+      "filename": "marine_life_00002__orig.jpg",
+      "annotated_path": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week4\\opencv\\annotated_marine_life_00002__orig.jpg"
+    },
+    {
+      "label": "marine_life",
+      "label_display": "Marine Life",
+      "prob_plastic": 3.142239593523222e-11,
+      "confidence": 0.9999999999685776,
+      "label_idx": 0,
+      "box": [
+        0,
+        55,
+        224,
+        202
+      ],
+      "true_class": "marine_life",
+      "correct": true,
+      "source": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\augmented\\marine_life\\marine_life_00008__orig.jpg",
+      "filename": "marine_life_00008__orig.jpg",
+      "annotated_path": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week4\\opencv\\annotated_marine_life_00008__orig.jpg"
+    },
+    {
+      "label": "marine_life",
+      "label_display": "Marine Life",
+      "prob_plastic": 7.930712513370963e-07,
+      "confidence": 0.9999992069287487,
+      "label_idx": 0,
+      "box": [
+        0,
+        12,
+        224,
+        212
+      ],
+      "true_class": "marine_life",
+      "correct": true,
+      "source": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\augmented\\marine_life\\marine_life_00013__orig.jpg",
+      "filename": "marine_life_00013__orig.jpg",
+      "annotated_path": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week4\\opencv\\annotated_marine_life_00013__orig.jpg"
+    },
+    {
+      "label": "marine_life",
+      "label_display": "Marine Life",
+      "prob_plastic": 3.0433565390008965e-11,
+      "confidence": 0.9999999999695665,
+      "label_idx": 0,
+      "box": [
+        0,
+        25,
+        224,
+        210
+      ],
+      "true_class": "marine_life",
+      "correct": true,
+      "source": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\augmented\\marine_life\\marine_life_00014__orig.jpg",
+      "filename": "marine_life_00014__orig.jpg",
+      "annotated_path": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week4\\opencv\\annotated_marine_life_00014__orig.jpg"
+    },
+    {
+      "label": "plastic_debris",
+      "label_display": "Plastic Debris",
+      "prob_plastic": 1.0,
+      "confidence": 1.0,
+      "label_idx": 1,
+      "box": [
+        36,
+        67,
+        130,
+        224
+      ],
+      "true_class": "plastic_debris",
+      "correct": true,
+      "source": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\augmented\\plastic_debris\\plastic_debris_00012__orig.jpg",
+      "filename": "plastic_debris_00012__orig.jpg",
+      "annotated_path": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week4\\opencv\\annotated_plastic_debris_00012__orig.jpg"
+    },
+    {
+      "label": "plastic_debris",
+      "label_display": "Plastic Debris",
+      "prob_plastic": 1.0,
+      "confidence": 1.0,
+      "label_idx": 1,
+      "box": [
+        8,
+        8,
+        216,
+        216
+      ],
+      "true_class": "plastic_debris",
+      "correct": true,
+      "source": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\augmented\\plastic_debris\\plastic_debris_00014__orig.jpg",
+      "filename": "plastic_debris_00014__orig.jpg",
+      "annotated_path": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week4\\opencv\\annotated_plastic_debris_00014__orig.jpg"
+    },
+    {
+      "label": "plastic_debris",
+      "label_display": "Plastic Debris",
+      "prob_plastic": 0.9999998211860657,
+      "confidence": 0.9999998211860657,
+      "label_idx": 1,
+      "box": [
+        8,
+        8,
+        216,
+        216
+      ],
+      "true_class": "plastic_debris",
+      "correct": true,
+      "source": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\augmented\\plastic_debris\\plastic_debris_00026__orig.jpg",
+      "filename": "plastic_debris_00026__orig.jpg",
+      "annotated_path": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week4\\opencv\\annotated_plastic_debris_00026__orig.jpg"
+    },
+    {
+      "label": "plastic_debris",
+      "label_display": "Plastic Debris",
+      "prob_plastic": 1.0,
+      "confidence": 1.0,
+      "label_idx": 1,
+      "box": [
+        0,
+        17,
+        224,
+        224
+      ],
+      "true_class": "plastic_debris",
+      "correct": true,
+      "source": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\augmented\\plastic_debris\\plastic_debris_00027__orig.jpg",
+      "filename": "plastic_debris_00027__orig.jpg",
+      "annotated_path": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week4\\opencv\\annotated_plastic_debris_00027__orig.jpg"
+    }
+  ],
+  "dashboard": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week4\\opencv\\opencv_dashboard.jpg",
+  "out_dir": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\outputs\\week4\\opencv"
+}

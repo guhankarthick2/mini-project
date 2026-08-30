@@ -1,0 +1,80 @@
+{
+  "model_name": "PlasticPulse_mobilenetv2_classifier",
+  "task": "binary_classification",
+  "classes": [
+    "marine_life",
+    "plastic_debris"
+  ],
+  "label_mapping": {
+    "0": "marine_life",
+    "1": "plastic_debris"
+  },
+  "feature_extractor": "frozen ImageNet-pretrained backbone",
+  "custom_head": [
+    "GlobalAveragePooling2D",
+    "Dropout",
+    "Dense(relu)",
+    "Dropout",
+    "Dense(1, sigmoid)"
+  ],
+  "optimizer": "Adam",
+  "loss": "binary_crossentropy",
+  "metrics": [
+    "accuracy",
+    "precision",
+    "recall",
+    "auc"
+  ],
+  "input_shape": [
+    224,
+    224,
+    3
+  ],
+  "params": {
+    "total": 2422081,
+    "trainable": 164097,
+    "non_trainable": 2257984
+  },
+  "layers": [
+    {
+      "name": "image",
+      "type": "InputLayer",
+      "trainable": true
+    },
+    {
+      "name": "mobilenetv2_preprocess",
+      "type": "Lambda",
+      "trainable": true
+    },
+    {
+      "name": "mobilenetv2_1.00_224",
+      "type": "Functional",
+      "trainable": false
+    },
+    {
+      "name": "gap_features",
+      "type": "GlobalAveragePooling2D",
+      "trainable": true
+    },
+    {
+      "name": "dropout_1",
+      "type": "Dropout",
+      "trainable": true
+    },
+    {
+      "name": "dense_features",
+      "type": "Dense",
+      "trainable": true
+    },
+    {
+      "name": "dropout_2",
+      "type": "Dropout",
+      "trainable": true
+    },
+    {
+      "name": "plastic_probability",
+      "type": "Dense",
+      "trainable": true
+    }
+  ]
+}

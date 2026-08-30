@@ -1,0 +1,77 @@
+{
+  "project": "Plastic-Pulse Ocean Tracker",
+  "week": 1,
+  "target_per_class": 2500,
+  "balanced": true,
+  "marine_life": {
+    "class": "marine_life",
+    "requested": 2500,
+    "saved": 2500,
+    "unique_candidates": 13936,
+    "rejected": 0,
+    "sources": {
+      "mikoajfish99/marine-animal-images": 158,
+      "vencerlanz09/sea-animals-image-dataste": 2342
+    },
+    "datasets": [
+      {
+        "slug": "vencerlanz09/sea-animals-image-dataste",
+        "note": "Sea Animals Image Dataset (multi-species marine creatures)",
+        "candidates": 13211,
+        "url": "https://www.kaggle.com/datasets/vencerlanz09/sea-animals-image-dataste"
+      },
+      {
+        "slug": "mikoajfish99/marine-animal-images",
+        "note": "Marine Animal Images (fish, turtle, seal, jellyfish, etc.)",
+        "candidates": 806,
+        "url": "https://www.kaggle.com/datasets/mikoajfish99/marine-animal-images"
+      }
+    ]
+  },
+  "plastic_debris": {
+    "class": "plastic_debris",
+    "requested": 2500,
+    "saved": 2500,
+    "unique_candidates": 4503,
+    "rejected": 0,
+    "sources": {
+      "zlatan599/garbage-dataset-classification": 818,
+      "arkadiyhacks/drinking-waste-classification": 1516,
+      "asdasdasasdas/garbage-classification": 166
+    },
+    "datasets": [
+      {
+        "slug": "zlatan599/garbage-dataset-classification",
+        "note": "Garbage Images Dataset (~2000+/class including plastic)",
+        "candidates": 2288,
+        "url": "https://www.kaggle.com/datasets/zlatan599/garbage-dataset-classification"
+      },
+      {
+        "slug": "asdasdasasdas/garbage-classification",
+        "note": "TrashNet / Garbage Classification (plastic class)",
+        "candidates": 482,
+        "url": "https://www.kaggle.com/datasets/asdasdasasdas/garbage-classification"
+      },
+      {
+        "slug": "arkadiyhacks/drinking-waste-classification",
+        "note": "Drinking waste: PET + HDPE plastic bottles",
+        "candidates": 5050,
+        "url": "https://www.kaggle.com/datasets/arkadiyhacks/drinking-waste-classification"
+      },
+      {
+        "slug": "jocelyndumlao/seaclear-marine-debris-detection-and-segmentation",
+        "note": "Seaclear underwater marine debris imagery (filename cues only)",
+        "candidates": 0,
+        "url": "https://www.kaggle.com/datasets/jocelyndumlao/seaclear-marine-debris-detection-and-segmentation"
+      },
+      {
+        "slug": "sovitrath/marine-debris-dataset",
+        "note": "Marine debris detection images",
+        "candidates": 0,
+        "url": "https://www.kaggle.com/datasets/sovitrath/marine-debris-dataset"
+      }
+    ]
+  },
+  "raw_dir": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\raw",
+  "cache_dir": "C:\\Users\\hickk\\mini-project\\Plastic-Pulse-Ocean-Tracker\\data\\kaggle_cache"
+}

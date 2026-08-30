@@ -6,7 +6,7 @@
     224,
     224
   ],
-  "normalization": "min-max to [0, 1] via /255",
+  "normalization": "uint8 JPEG on disk; float32 [0,1] via /255 (verified with .npy QA samples)",
   "augmentations": [
     "horizontal_flip",
     "vertical_flip",
@@ -17,29 +17,33 @@
   "classes": [
     {
       "class": "marine_life",
-      "raw_images": 40,
-      "processed_images": 40,
-      "augmented_images": 240,
-      "pixel_min": 0.003921568859368563,
+      "raw_images": 2500,
+      "processed_images": 2500,
+      "augmented_images": 15000,
+      "npy_qa_samples": 25,
+      "pixel_min": 0.0,
       "pixel_max": 1.0,
       "input_shape": [
         224,
         224,
         3
-      ]
+      ],
+      "normalization_note": "JPEGs load as uint8; divide by 255.0 to obtain [0,1] float tensors"
     },
     {
       "class": "plastic_debris",
-      "raw_images": 40,
-      "processed_images": 40,
-      "augmented_images": 240,
-      "pixel_min": 0.062745101749897,
+      "raw_images": 2500,
+      "processed_images": 2500,
+      "augmented_images": 15000,
+      "npy_qa_samples": 25,
+      "pixel_min": 0.0,
       "pixel_max": 1.0,
       "input_shape": [
         224,
         224,
         3
-      ]
+      ],
+      "normalization_note": "JPEGs load as uint8; divide by 255.0 to obtain [0,1] float tensors"
     }
   ],
   "paths": {

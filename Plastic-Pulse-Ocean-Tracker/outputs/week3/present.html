@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 3 — Train & Evaluate | Plastic-Pulse</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #121a2b; --line: #243049;
+      --text: #e8eefc; --muted: #9db0d0; --accent: #38bdf8; --green: #34d399; --amber: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, system-ui, sans-serif;
+      background: radial-gradient(1200px 600px at 10% -10%, #1e3a5f 0%, var(--bg) 55%);
+      color: var(--text); line-height: 1.45;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { font-size: 1.2rem; margin: 0 0 12px; color: var(--accent); }
+    h3 { font-size: 1rem; margin: 0 0 8px; color: var(--muted); font-weight: 600; }
+    .sub { color: var(--muted); margin-bottom: 20px; }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+    .nav a {
+      color: var(--text); text-decoration: none; background: #182338;
+      border: 1px solid var(--line); padding: 7px 11px; border-radius: 10px; font-size: .88rem;
+    }
+    .nav a:hover { border-color: var(--accent); color: var(--accent); }
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(4, 1fr); margin-bottom: 16px; }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+      padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .stat { font-size: 1.6rem; font-weight: 700; }
+    .label { color: var(--muted); font-size: .85rem; }
+    .ok { color: var(--green); }
+    table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); }
+    img { max-width: 100%; border-radius: 10px; border: 1px solid var(--line); background: #fff; }
+    .plots { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+    .plots.single { grid-template-columns: 1fr; }
+    .caption { color: var(--muted); font-size: .88rem; margin: 8px 0 0; }
+    code { font-family: Consolas, monospace; background: #0a101c; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--line); }
+    @media (max-width: 800px) { .grid, .plots { grid-template-columns: 1fr; } }
+    @media print {
+      body { background: white; color: #111; }
+      .card { box-shadow: none; background: white; border-color: #ccc; }
+      .nav { display: none; }
+      h2, .ok { color: #047857; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <a href="#dashboard">Dashboard</a>
+      <a href="#accuracy">Accuracy curves</a>
+      <a href="#test-metrics">Test metrics</a>
+      <a href="#confusion">Confusion matrix</a>
+      <a href="#per-class">Per-class</a>
+      <a href="#experiments">Experiments</a>
+      <a href="#summary">Data split</a>
+    </div>
+
+    <h1>Week 3 Deliverable</h1>
+    <p class="sub">Plastic-Pulse Ocean Tracker — train / validate / test the frozen MobileNetV2 + Dense head classifier</p>
+
+    <div class="grid">
+      <div class="card"><div class="label">Test accuracy</div><div class="stat ok">99.47%</div></div>
+      <div class="card"><div class="label">Test AUC</div><div class="stat">0.999</div></div>
+      <div class="card"><div class="label">Best dropout</div><div class="stat">0.5</div></div>
+      <div class="card"><div class="label">Fit diagnosis</div><div class="stat ok">good_fit</div></div>
+    </div>
+
+    <div class="card" id="dashboard">
+      <h2>Performance dashboard (single slide)</h2>
+      <p class="caption">Use this one image for a quick overview: learning curves, test metrics, confusion matrix, and fit summary.</p>
+      <img src="presentation/graph_summary_dashboard.png" alt="Summary dashboard" />
+    </div>
+
+    <div class="card" id="accuracy">
+      <h2>Training &amp; validation accuracy</h2>
+      <p class="caption">14 epochs ran (early stopping). Train and validation accuracy both rise quickly and stay above 99.5% — the model learns the marine-life vs plastic-debris boundary without a large train/val gap.</p>
+      <div class="plots">
+        <div>
+          <h3>Accuracy over epochs</h3>
+          <img src="presentation/graph_accuracy_epochs.png" alt="Accuracy epochs" />
+        </div>
+        <div>
+          <h3>Loss over epochs</h3>
+          <img src="presentation/graph_loss_epochs.png" alt="Loss epochs" />
+        </div>
+      </div>
+      <div class="plots single" style="margin-top:14px">
+        <div>
+          <h3>Combined learning curves</h3>
+          <img src="presentation/graph_accuracy_loss_combined.png" alt="Combined curves" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="test-metrics">
+      <h2>Held-out test set metrics</h2>
+      <p class="caption">Final evaluation on 4,500 unseen images (750 source stems × 6 augmentations). All metrics exceed 99.2%.</p>
+      <div class="plots single">
+        <img src="presentation/graph_test_metrics.png" alt="Test metrics bar chart" />
+      </div>
+      <table style="margin-top:12px">
+        <tbody>
+          <tr><th>Accuracy</th><td>0.9947</td></tr>
+          <tr><th>Precision</th><td>0.9929</td></tr>
+          <tr><th>Recall</th><td>0.9964</td></tr>
+          <tr><th>F1</th><td>0.9947</td></tr>
+          <tr><th>AUC</th><td>0.9991</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" id="confusion">
+      <h2>Confusion matrix (test set)</h2>
+      <p class="caption">24 total errors: 16 marine_life called plastic_debris, 8 plastic_debris called marine_life. The model is slightly biased toward detecting plastic.</p>
+      <div class="plots single" style="max-width:520px">
+        <img src="presentation/graph_confusion_matrix.png" alt="Confusion matrix" />
+      </div>
+    </div>
+
+    <div class="card" id="per-class">
+      <h2>Per-class precision &amp; recall</h2>
+      <p class="caption">Both classes perform similarly — balanced binary classifier with high recall on plastic debris (99.6%).</p>
+      <div class="plots single" style="max-width:560px">
+        <img src="presentation/graph_per_class_metrics.png" alt="Per-class metrics" />
+      </div>
+    </div>
+
+    <div class="card" id="experiments">
+      <h2>Hyperparameter experiment comparison</h2>
+      <p class="caption">12 runs on the same test split. <strong>dropout=0.5</strong> achieved the best test accuracy among fair full-augmentation experiments.</p>
+      <div class="plots single">
+        <img src="presentation/graph_experiment_accuracy.png" alt="Experiment comparison" />
+      </div>
+      <p class="caption">Full write-up: <a href="experiments/EXPERIMENT_REPORT.md" style="color:var(--accent)">experiments/EXPERIMENT_REPORT.md</a></p>
+    </div>
+
+    <div class="card" id="summary">
+      <h2>Dataset split (stem-level, no aug leak)</h2>
+      <table>
+        <thead><tr><th>Split</th><th>Stems</th><th>Images</th><th>marine_life</th><th>plastic_debris</th></tr></thead>
+        <tbody>
+          <tr><td>Train</td><td>3,500</td><td>21,000</td><td>10,500</td><td>10,500</td></tr>
+          <tr><td>Val</td><td>750</td><td>4,500</td><td>2,250</td><td>2,250</td></tr>
+          <tr><td>Test</td><td>750</td><td>4,500</td><td>2,250</td><td>2,250</td></tr>
+        </tbody>
+      </table>
+      <p style="color:var(--muted);margin:10px 0 0">All 6 augmentations of one source image stay in the same split.</p>
+    </div>
+
+    <div class="card">
+      <h2>Overfitting / underfitting</h2>
+      <p><strong class="ok">good_fit</strong> — train/val accuracy gap ≈ +0.001; test tracks validation.</p>
+      <p style="color:var(--muted)">Val loss rises slightly late in training while train loss keeps falling. Early stopping restores best weights. Dropout 0.5 improved generalization vs 0.3 or 0.0.</p>
+    </div>
+
+    <div class="card">
+      <h2>Reproduce graphs &amp; training</h2>
+      <p><code>python scripts/generate_presentation_graphs.py</code></p>
+      <p style="margin-top:8px"><code>python scripts/train_model.py --epochs 20 --batch-size 64 --dropout 0.5</code></p>
+      <p style="color:var(--muted);margin-top:8px">Live demo: <code>python scripts/predict_demo.py --show</code></p>
+    </div>
+  </div>
+</body>
+</html>

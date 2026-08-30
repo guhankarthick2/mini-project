@@ -4,9 +4,18 @@ __pycache__/
 .ipynb_checkpoints/
 .DS_Store
 Thumbs.db
+kaggle.json
+.kaggle/
 outputs/*.png
-# Keep summary JSON trackable; ignore bulky binaries if needed later
+outputs/share/
+*.zip
+# Keep summary JSON trackable; ignore bulky binaries
 data/raw/**/*.jpg
+data/raw/**/*.jpeg
 data/raw/**/*.png
 data/processed/
 data/augmented/
+data/kaggle_cache/
+data/feature_cache/
+models/saved/
+*.keras

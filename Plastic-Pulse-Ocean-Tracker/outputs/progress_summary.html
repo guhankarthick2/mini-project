@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Progress Summary — Plastic-Pulse Ocean Tracker</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #121a2b;
+      --line: #243049;
+      --text: #e8eefc;
+      --muted: #9db0d0;
+      --accent: #38bdf8;
+      --green: #34d399;
+      --amber: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, system-ui, sans-serif;
+      background: radial-gradient(1200px 600px at 10% -10%, #1e3a5f 0%, var(--bg) 55%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 72px; }
+    h1 { font-size: 2rem; margin: 0 0 6px; }
+    h2 { font-size: 1.25rem; margin: 0 0 12px; color: var(--accent); }
+    h3 { font-size: 1.05rem; margin: 18px 0 8px; }
+    .sub { color: var(--muted); margin: 0 0 24px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(4, 1fr); margin-bottom: 16px; }
+    .stat { font-size: 1.55rem; font-weight: 700; }
+    .label { color: var(--muted); font-size: .85rem; }
+    .ok { color: var(--green); }
+    .soon { color: var(--amber); }
+    table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; }
+    a { color: var(--accent); }
+    code, pre {
+      font-family: Consolas, ui-monospace, monospace;
+      background: #0a101c;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    code { padding: 1px 5px; }
+    pre { padding: 12px; overflow-x: auto; white-space: pre-wrap; color: #d7e3ff; }
+    .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .pill {
+      background: #182338;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: .88rem;
+    }
+    .arrow { color: var(--muted); }
+    .note { color: var(--muted); font-size: .92rem; }
+    .plots { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; margin-top: 10px; }
+    .plots.single { grid-template-columns: 1fr; }
+    img.graph { max-width: 100%; border-radius: 10px; border: 1px solid var(--line); background: #fff; }
+    h3.graph-title { font-size: .95rem; margin: 16px 0 6px; color: var(--muted); font-weight: 600; }
+    @media (max-width: 800px) { .grid, .plots { grid-template-columns: 1fr; } }
+    @media print {
+      body { background: white; color: #111; }
+      .card { box-shadow: none; border-color: #ccc; background: white; }
+      h2, a { color: #0369a1; }
+      .ok { color: #047857; }
+      .soon { color: #b45309; }
+      code, pre { background: #f4f4f5; color: #111; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Internship Progress Summary</h1>
+    <p class="sub">
+      Plastic-Pulse Ocean Tracker — Weeks 1 &amp; 2 of 4<br>
+      Binary CV classifier: <strong>Marine Life vs Plastic Debris</strong><br>
+      <a href="https://github.com/guhankarthick2/Plastic-Pulse-Ocean-Tracker">github.com/guhankarthick2/Plastic-Pulse-Ocean-Tracker</a>
+      · branch <code>master</code>
+    </p>
+
+    <div class="grid">
+      <div class="card"><div class="label">Week 1 data</div><div class="stat ok">Done</div></div>
+      <div class="card"><div class="label">Week 2 model</div><div class="stat ok">Done</div></div>
+      <div class="card"><div class="label">Week 3 train</div><div class="stat ok">99.47% test</div></div>
+      <div class="card"><div class="label">Fit diagnosis</div><div class="stat ok">good_fit</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Executive summary</h2>
+      <p>This internship builds a lightweight image classifier so ocean drones can tell <strong>living marine animals</strong> from <strong>plastic debris</strong> and avoid harming wildlife while cleaning waste.</p>
+      <p>Weeks 1–4: balanced dataset, MobileNetV2 classifier (train <strong>100%</strong>, test <strong>99.38%</strong> after Week 4 retrain), and OpenCV live detection with bounding boxes.</p>
+    </div>
+
+    <div class="card">
+      <h2>Submission links</h2>
+      <table>
+        <tbody>
+          <tr><th>Code</th><td><a href="https://github.com/guhankarthick2/Plastic-Pulse-Ocean-Tracker">Repository</a> · <a href="https://github.com/guhankarthick2/Plastic-Pulse-Ocean-Tracker/blob/master/models/classifier.py">classifier.py</a></td></tr>
+          <tr><th>Progress document</th><td><a href="https://github.com/guhankarthick2/Plastic-Pulse-Ocean-Tracker/blob/master/docs/PROGRESS_SUMMARY.md">docs/PROGRESS_SUMMARY.md</a></td></tr>
+          <tr><th>Architecture page</th><td><a href="https://github.com/guhankarthick2/Plastic-Pulse-Ocean-Tracker/blob/master/outputs/week2/present.html">outputs/week2/present.html</a></td></tr>
+          <tr><th>Data</th><td><a href="https://github.com/guhankarthick2/Plastic-Pulse-Ocean-Tracker/releases/download/week1-augmented-dataset/PlasticPulse_augmented_dataset.zip">Download zip (30,000 images, ~368 MB)</a> · <a href="https://github.com/guhankarthick2/Plastic-Pulse-Ocean-Tracker/releases/tag/week1-augmented-dataset">release page</a></td></tr>
+          <tr><th>Demo recording</th><td>Recorded separately by the intern</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Week 1 — Data foundations</h2>
+      <p class="note">Curate a balanced Kaggle set, resize to 224×224, normalize to [0, 1] at load, augment with flips and small rotations.</p>
+      <table>
+        <thead><tr><th>Stage</th><th>marine_life</th><th>plastic_debris</th><th>Total</th></tr></thead>
+        <tbody>
+          <tr><td>Curated raw</td><td>2,500</td><td>2,500</td><td>5,000</td></tr>
+          <tr><td>Processed 224×224</td><td>2,500</td><td>2,500</td><td>5,000</td></tr>
+          <tr><td>Augmented (6×)</td><td>15,000</td><td>15,000</td><td><strong>30,000</strong></td></tr>
+        </tbody>
+      </table>
+      <h3>Sources kept in the raw set</h3>
+      <table>
+        <thead><tr><th>Class</th><th>Kaggle dataset</th><th>Kept</th></tr></thead>
+        <tbody>
+          <tr><td>marine_life</td><td>vencerlanz09/sea-animals-image-dataste</td><td>2,342</td></tr>
+          <tr><td>marine_life</td><td>mikoajfish99/marine-animal-images</td><td>158</td></tr>
+          <tr><td>plastic_debris</td><td>arkadiyhacks/drinking-waste-classification (PET/HDPE)</td><td>1,516</td></tr>
+          <tr><td>plastic_debris</td><td>zlatan599/garbage-dataset-classification (plastic)</td><td>818</td></tr>
+          <tr><td>plastic_debris</td><td>asdasdasasdas/garbage-classification (plastic)</td><td>166</td></tr>
+        </tbody>
+      </table>
+      <h3>Augmentation variants</h3>
+      <p>original · horizontal flip · vertical flip · +15° · −15° · +30°</p>
+      <p class="note">Resize uses aspect-preserving pad (no stretch). JPEGs on disk are uint8; <code>/255</code> produces [0, 1] (verified with 25 <code>.npy</code> QA samples per class). Scripts: <code>curate_dataset.py</code>, <code>preprocess_and_augment.py</code>, <code>run_week1.py</code>.</p>
+    </div>
+
+    <div class="card">
+      <h2>Week 2 — Frozen backbone + custom head</h2>
+      <div class="flow" style="margin-bottom:14px">
+        <span class="pill">224×224×3</span><span class="arrow">→</span>
+        <span class="pill">MobileNetV2 frozen</span><span class="arrow">→</span>
+        <span class="pill">GAP</span><span class="arrow">→</span>
+        <span class="pill">Dropout 0.3</span><span class="arrow">→</span>
+        <span class="pill">Dense(128, ReLU)</span><span class="arrow">→</span>
+        <span class="pill">Dropout 0.3</span><span class="arrow">→</span>
+        <span class="pill">Dense(1, sigmoid)</span>
+      </div>
+      <table>
+        <thead><tr><th></th><th>Count</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td>Total params</td><td>2,422,081</td><td>Full model (9.24 MB)</td></tr>
+          <tr><td class="ok">Trainable</td><td class="ok">164,097</td><td>Custom head only</td></tr>
+          <tr><td>Frozen</td><td>2,257,984</td><td>ImageNet MobileNetV2</td></tr>
+        </tbody>
+      </table>
+      <p>Labels: <code>0 = marine_life</code>, <code>1 = plastic_debris</code>. Compiled with Adam, <code>binary_crossentropy</code>, accuracy / precision / recall / AUC.</p>
+      <p class="note">Build: <code>python scripts/build_model.py --backbone mobilenetv2 --save</code>. Saved model is gitignored at <code>models/saved/PlasticPulse_mobilenetv2_classifier.keras</code>.</p>
+    </div>
+
+    <div class="card">
+      <h2>Dataset packaging</h2>
+      <p>Share <code>data/augmented/</code> (~362 MB, 30,000 JPEGs). Zip command:</p>
+      <pre>python scripts/package_dataset.py</pre>
+      <p class="note">Output: <code>outputs/share/PlasticPulse_augmented_dataset.zip</code>. GitHub does not host these images in the source tree.</p>
+    </div>
+
+    <div class="card">
+      <h2>Week 3 — Train &amp; evaluate</h2>
+      <p>Stem-level 70/15/15 split · dropout 0.5 · early stopping · 12 hyperparameter experiments.</p>
+      <table>
+        <tbody>
+          <tr><th>Test accuracy</th><td>99.47%</td></tr>
+          <tr><th>Precision / Recall / AUC</th><td>99.29% / 99.64% / 0.999</td></tr>
+          <tr><th>Fit</th><td class="ok">good_fit</td></tr>
+          <tr><th>Notes</th><td>Best full-aug setting: lr=1e-3, batch=64, dropout=0.5</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="graph-title">Performance dashboard (one slide)</h3>
+      <img class="graph" src="week3/presentation/graph_summary_dashboard.png" alt="Summary dashboard" />
+
+      <h3 class="graph-title">Accuracy &amp; loss over epochs</h3>
+      <div class="plots">
+        <img class="graph" src="week3/presentation/graph_accuracy_epochs.png" alt="Accuracy epochs" />
+        <img class="graph" src="week3/presentation/graph_loss_epochs.png" alt="Loss epochs" />
+      </div>
+      <div class="plots single">
+        <img class="graph" src="week3/presentation/graph_accuracy_loss_combined.png" alt="Combined curves" />
+      </div>
+
+      <h3 class="graph-title">Held-out test metrics</h3>
+      <div class="plots single" style="max-width:640px">
+        <img class="graph" src="week3/presentation/graph_test_metrics.png" alt="Test metrics" />
+      </div>
+
+      <h3 class="graph-title">Confusion matrix &amp; per-class metrics</h3>
+      <div class="plots">
+        <img class="graph" src="week3/presentation/graph_confusion_matrix.png" alt="Confusion matrix" />
+        <img class="graph" src="week3/presentation/graph_per_class_metrics.png" alt="Per-class metrics" />
+      </div>
+
+      <h3 class="graph-title">Hyperparameter experiments</h3>
+      <div class="plots single">
+        <img class="graph" src="week3/presentation/graph_experiment_accuracy.png" alt="Experiment comparison" />
+      </div>
+
+      <p class="note">Full presentation: <a href="week3/present.html">outputs/week3/present.html</a> · Report: <a href="week3/WEEK3_REPORT.md">WEEK3_REPORT.md</a></p>
+    </div>
+
+    <div class="card">
+      <h2>Week 4 — OpenCV integration</h2>
+      <p>OpenCV contour ROI → Keras classify → bounding box + label + confidence. Tested on 8 held-out <code>__orig</code> images: <strong>8/8 correct</strong>.</p>
+      <h3 class="graph-title">OpenCV dashboard</h3>
+      <div class="plots single">
+        <img class="graph" src="week4/opencv/opencv_dashboard.jpg" alt="OpenCV dashboard" />
+      </div>
+      <p class="note">Script: <code>scripts/opencv_detect.py</code> · Report: <a href="week4/WEEK4_REPORT.md">WEEK4_REPORT.md</a> · Retrain: train 100%, test 99.38% (<code>dropout=0.2</code>)</p>
+    </div>
+  </div>
+</body>
+</html>
